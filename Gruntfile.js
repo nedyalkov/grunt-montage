@@ -51,6 +51,22 @@ module.exports = function (grunt) {
                     outputStylesheet: "test.css"
                 }
             },
+            widthHeight: {
+                files: {
+                    "tmp/width_height": [
+                        "test/fixtures/*.png"
+                    ]
+                },
+                options: {
+                    size: {
+                        width: 10,
+                        height: 20
+                    },
+                    prefix: ".test",
+                    outputImage: "test.png",
+                    outputStylesheet: "test.css"
+                }
+            },
             base: {
                 files: {
                     "tmp/base": [
