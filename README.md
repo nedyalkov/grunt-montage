@@ -111,6 +111,27 @@ grunt.initConfig({
 });
 ```
 
+The following example demonstrates how to create a sprite from non-rectangular images. It will generate a sprite sheet of 12x24 pixel images.
+```js
+grunt.initConfig({
+    montage: {
+        simple: {
+            files: {
+                "assets/sprites": [
+                    "images/icons/*.png"
+                ]
+            },
+            options: {
+                size: {
+                    width: 12,
+                    height: 24
+                }
+            }
+        }
+    }
+});
+```
+
 In this example, custom options are used to pass extra configuration through to ImageMagick. It will generate the same sprite sheet as the previous example, but with a transparent background.
 
 ```js
