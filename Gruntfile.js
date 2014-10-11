@@ -67,6 +67,32 @@ module.exports = function (grunt) {
                     outputStylesheet: "test.css"
                 }
             },
+            singleRow: {
+                files: {
+                    "tmp/singleRow": [
+                        "test/fixtures/*.png"
+                    ]
+                },
+                options: {
+                    size: 10,
+                    arrange: {
+                        rows: 1
+                    }
+                }
+            },
+            singleCol: {
+                files: {
+                    "tmp/singleCol": [
+                        "test/fixtures/*.png"
+                    ]
+                },
+                options: {
+                    size: 10,
+                    arrange: {
+                        cols: 1
+                    }
+                }
+            },
             base: {
                 files: {
                     "tmp/base": [

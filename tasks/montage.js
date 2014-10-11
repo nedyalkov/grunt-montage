@@ -14,6 +14,26 @@ module.exports = function (grunt) {
         }).join(" ") + " }\n";
     }
 
+    function calcArrangement(arrangeOptions, imgs) {
+        var arrange = {
+            rows: 0,
+            cols: 0
+        };
+
+        if (!arrangeOptions.cols || arrangeOptions.cols > imgs || arrangeOptions.cols <= 0) {
+            if (!arrangeOptions.rows || arrangeOptions.rows > imgs || arrangeOptions.rows <= 0) {
+                arrangeOptions.rows = Math.ceil(Math.sqrt(imgs));
+            }
+
+            arrangeOptions.cols = Math.ceil(imgs / arrangeOptions.rows);
+        }
+
+        arrange.cols = arrangeOptions.cols;
+        arrange.rows = Math.ceil(imgs / arrange.cols);
+
+        return arrange;
+    }
+
     grunt.registerMultiTask("montage", "Generate CSS sprite sheets and the corresponding stylesheet", function () {
 
         // It's an async task so make sure Grunt knows this
@@ -22,6 +42,7 @@ module.exports = function (grunt) {
             options = {},
             defaults = {
                 size: 16,
+                arrange: {},
                 prefix: ".montage",
                 outputImage: "montage.png",
                 outputStylesheet: "montage.css",
@@ -57,7 +78,6 @@ module.exports = function (grunt) {
 
         // Iterate over all specified file groups.
         this.files.forEach(function (files) {
-
             // Remove non-existent files from the list
             var src = files.src.filter(function (file) {
                     if (!grunt.file.exists(file)) {
@@ -67,10 +87,8 @@ module.exports = function (grunt) {
                     return true;
                 }),
                 dest = path.join(files.dest, options.outputImage),
-                sqrt = Math.sqrt(src.length),
-                rows = Math.floor(sqrt),
-                cols = Math.ceil(sqrt),
-                css = buildRule(options.prefix, options.baseRules);
+                css = buildRule(options.prefix, options.baseRules),
+                arrange = calcArrangement(options.arrange, src.length);
 
             // Create the output directory if necessary (ImageMagick errors if it doesn't exist)
             if (!grunt.file.exists(files.dest)) {
@@ -79,8 +97,8 @@ module.exports = function (grunt) {
 
             // Generate a stylesheet
             css += src.map(function (image, i) {
-                var offsetLeft = (-options.size.width * (i % cols)) + "px",
-                    offsetTop = (-options.size.height * Math.floor(i / cols)) + "px",
+                var offsetLeft = (-options.size.width * (i % arrange.cols)) + "px",
+                    offsetTop = (-options.size.height * Math.floor(i / arrange.cols)) + "px",
                     className = path.basename(image).replace(/\.\w+$/, "").replace(rSpecial, "\\$1");
                 return buildRule(options.prefix + "." + className, {
                     "background-position": offsetLeft + " " + offsetTop
@@ -90,7 +108,7 @@ module.exports = function (grunt) {
             grunt.file.write(path.join(files.dest, options.outputStylesheet), css);
 
             // Execute the ImageMagick montage tool
-            exec("montage -tile " + cols + "x -geometry " + options.size.width + "x" + options.size.height + " " + cliOptions + " " + src.join(" ") + " " + dest, function (err) {
+            exec("montage -tile " + arrange.cols + "x -geometry " + options.size.width + "x" + options.size.height + " " + cliOptions + " " + src.join(" ") + " " + dest, function (err) {
                 done();
             });
         });

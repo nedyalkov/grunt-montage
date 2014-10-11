@@ -27,12 +27,26 @@ exports.montage = (function () {
             test.done();
         },
         customBase: function (test) {
-            test.expect(3);
+            test.expect(5);
             test.equal(grunt.file.exists("tmp/base/base.css"), true, "should generage a base.css file.");
             test.equal(grunt.file.read("tmp/base/base.css").indexOf("display: inline-block;") > -1, true, "should add custom base rule properties to the CSS");
             test.equal(grunt.file.read("tmp/base/base.css").indexOf("text-indent: -9999px;") > -1, true, "should add custom base rule properties to the CSS");
+            test.equal(grunt.file.read("tmp/base/base.css").indexOf(".emoji_zap { background-position: -32px -16px; }") > -1, true, "num 5 should be on (2, 1).");
+            test.equal(grunt.file.read("tmp/base/base.css").indexOf(".emoji_zzz { background-position: -16px -32px; }") > -1, true, "last (num 8) should be on (1, 2).");
             test.done();
-        }
+        },
+        singleRow: function (test) {
+            test.expect(2);
+            test.equal(grunt.file.read("tmp/singleRow/montage.css").indexOf(".emoji_zap { background-position: -50px 0px; }") > -1, true, "num 5 should be on first row.");
+            test.equal(grunt.file.read("tmp/singleRow/montage.css").indexOf(".emoji_zzz { background-position: -70px 0px; }") > -1, true, "last (num 8) should be on first row.");
+            test.done();
+        },
+        singleCol: function (test) {
+            test.expect(2);
+            test.equal(grunt.file.read("tmp/singleCol/montage.css").indexOf(".emoji_zap { background-position: 0px -50px; }") > -1, true, "num 5 should on the first column.");
+            test.equal(grunt.file.read("tmp/singleCol/montage.css").indexOf(".emoji_zzz { background-position: 0px -70px; }") > -1, true, "last (num 8) should on the first column.");
+            test.done();
+        },
     };
 
 }());
