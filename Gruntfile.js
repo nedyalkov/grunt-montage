@@ -31,17 +31,24 @@ module.exports = function (grunt) {
 
         // Configuration to be run (and then tested).
         montage: {
+            spaces: {
+                files: {
+                    "tmp/spaces": [
+                        "test/fixtures-set2/*.png"
+                    ]
+                }
+            },
             defaults: {
                 files: {
                     "tmp/defaults": [
-                        "test/fixtures/*.png"
+                        "test/fixtures-set1/*.png"
                     ]
                 }
             },
             basic: {
                 files: {
                     "tmp/basic": [
-                        "test/fixtures/*.png"
+                        "test/fixtures-set1/*.png"
                     ]
                 },
                 options: {
@@ -54,7 +61,7 @@ module.exports = function (grunt) {
             widthHeight: {
                 files: {
                     "tmp/width_height": [
-                        "test/fixtures/*.png"
+                        "test/fixtures-set1/*.png"
                     ]
                 },
                 options: {
@@ -70,7 +77,7 @@ module.exports = function (grunt) {
             singleRow: {
                 files: {
                     "tmp/singleRow": [
-                        "test/fixtures/*.png"
+                        "test/fixtures-set1/*.png"
                     ]
                 },
                 options: {
@@ -83,7 +90,7 @@ module.exports = function (grunt) {
             singleCol: {
                 files: {
                     "tmp/singleCol": [
-                        "test/fixtures/*.png"
+                        "test/fixtures-set1/*.png"
                     ]
                 },
                 options: {
@@ -96,7 +103,7 @@ module.exports = function (grunt) {
             base: {
                 files: {
                     "tmp/base": [
-                        "test/fixtures/*.png"
+                        "test/fixtures-set1/*.png"
                     ]
                 },
                 options: {

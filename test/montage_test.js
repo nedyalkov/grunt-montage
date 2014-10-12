@@ -5,6 +5,14 @@ exports.montage = (function () {
     var grunt = require("grunt");
 
     return {
+        spaces: function (test) {
+            test.expect(4);
+            test.equal(grunt.file.exists("tmp/spaces/montage.png"), true, "should generate a default montage.png file.");
+            test.equal(grunt.file.exists("tmp/spaces/montage.css"), true, "should generage a default montage.css file.");
+            test.equal(grunt.file.read("tmp/spaces/montage.css").indexOf(".emoji_1 { background-position: 0px 0px; }") > -1, true, "spaces should be replaced with _");
+            test.equal(grunt.file.read("tmp/spaces/montage.css").indexOf(".emoji_x { background-position: 0px -16px; }") > -1, true, "spaces should be replaced with _");
+            test.done();
+        },
         defaults: function (test) {
             test.expect(2);
             test.equal(grunt.file.exists("tmp/defaults/montage.png"), true, "should generate a default montage.png file.");

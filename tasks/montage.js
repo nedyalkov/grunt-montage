@@ -88,7 +88,10 @@ module.exports = function (grunt) {
                 }),
                 dest = path.join(files.dest, options.outputImage),
                 css = buildRule(options.prefix, options.baseRules),
-                arrange = calcArrangement(options.arrange, src.length);
+                arrange = calcArrangement(options.arrange, src.length),
+                filesList = src.map(function (img) {
+                    return "\"" + img + "\"";
+                }).join(" ");
 
             // Create the output directory if necessary (ImageMagick errors if it doesn't exist)
             if (!grunt.file.exists(files.dest)) {
@@ -99,7 +102,11 @@ module.exports = function (grunt) {
             css += src.map(function (image, i) {
                 var offsetLeft = (-options.size.width * (i % arrange.cols)) + "px",
                     offsetTop = (-options.size.height * Math.floor(i / arrange.cols)) + "px",
-                    className = path.basename(image).replace(/\.\w+$/, "").replace(rSpecial, "\\$1");
+                    className = path.basename(image)
+                                    .replace(/\.\w+$/, "")
+                                    .replace(rSpecial, "\\$1")
+                                    .replace(/\s+/g, "_");
+
                 return buildRule(options.prefix + "." + className, {
                     "background-position": offsetLeft + " " + offsetTop
                 });
@@ -108,7 +115,7 @@ module.exports = function (grunt) {
             grunt.file.write(path.join(files.dest, options.outputStylesheet), css);
 
             // Execute the ImageMagick montage tool
-            exec("montage -tile " + arrange.cols + "x -geometry " + options.size.width + "x" + options.size.height + " " + cliOptions + " " + src.join(" ") + " " + dest, function (err) {
+            exec("montage -tile " + arrange.cols + "x -geometry " + options.size.width + "x" + options.size.height + " " + cliOptions + " " + filesList + " " + dest, function (err) {
                 done();
             });
         });
